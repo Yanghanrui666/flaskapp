@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        PYTHON_PATH = 'D:\编程\python\python.exe'
+        PYTHON_PATH = 'C:\\ProgramData\\Anaconda3\\python.exe'
     }
     
     stages {
