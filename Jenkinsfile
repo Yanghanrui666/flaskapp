@@ -79,13 +79,17 @@ pipeline {
             }
         }
 
-        stage('Build') {
+                stage('Build') {
             steps {
                 bat '''
                     @echo off
-                    "%PYTHON_PATH%" -m pip install pyinstaller
+                    "%PYTHON_PATH%" -m venv .build-venv
                     if errorlevel 1 exit /b 1
-                    "%PYTHON_PATH%" -m PyInstaller --onefile app.py
+
+                    ".build-venv\\Scripts\\python.exe" -m pip install -r requirements.txt pyinstaller
+                    if errorlevel 1 exit /b 1
+
+                    ".build-venv\\Scripts\\python.exe" -m PyInstaller --clean --noconfirm --onefile app.py
                     if errorlevel 1 exit /b 1
                 '''
             }
