@@ -2,20 +2,23 @@ pipeline {
     agent any
     
     environment {
-        PYTHON_PATH = 'C:\\ProgramData\\Anaconda3\\python.exe'
-    }
+    PYTHON_PATH = 'C:\\ProgramData\\Anaconda3\\python.exe'
+    PATH = "C:\\ProgramData\\Anaconda3;C:\\ProgramData\\Anaconda3\\Library\\bin;C:\\ProgramData\\Anaconda3\\Scripts;${env.PATH}"
+    PYTHONUTF8 = '1'
+    PYTHONIOENCODING = 'utf-8'
+}
     
-    stages {
-        stage('Verify Python Path') {
-            steps {
-                bat """
-                    @echo off
-                    echo "=== 验证Python313路径及版本 ==="
-                    ${PYTHON_PATH} --version  // 仅保留此关键验证（成功即证明路径正确）
-                    echo "Python路径验证通过！"
-                """
-            }
-        }
+    stage('Verify Python Path') {
+    steps {
+        bat '''
+            @echo off
+            "%PYTHON_PATH%" --version
+            if errorlevel 1 exit /b 1
+            "%PYTHON_PATH%" -c "import ssl; print(ssl.OPENSSL_VERSION)"
+            if errorlevel 1 exit /b 1
+        '''
+    }
+}
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/Yanghanrui666/flaskapp.git', branch: 'main'
