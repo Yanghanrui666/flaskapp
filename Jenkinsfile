@@ -18,7 +18,7 @@ pipeline {
             if errorlevel 1 exit /b 1
         '''
     }
-}
+
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/Yanghanrui666/flaskapp.git', branch: 'main'
